@@ -1,6 +1,8 @@
 <template>
-  <div class="container my-5">
+  <div class="container">
 
+     <a href="#" @click="logout" class="btn btn-danger ms-3 float-end">Logout</a>
+   
     <h3>{{ isEdit ? 'Edit': 'Create'}}</h3>
     <form @submit.prevent="isEdit ? update() : store()">
         <div class="col-4">
@@ -46,9 +48,11 @@
 </template>
 
 <script>
+
+import Test from './TestComponent.vue';
+
 export default {
   name: 'PostComponent',
-
   data() {
 
     return {
@@ -68,17 +72,17 @@ export default {
   methods: {
 
     searchPost(){
-        axios.get('/api/posts/?search='+ this.search)
+        axios.get('/posts/?search='+ this.search)
         .then(response => this.posts = response.data)
     },
 
     index(){
-        axios.get('/api/posts')
+        axios.get('/posts')
         .then(response => this.posts = response.data)
     },
 
     store(){
-        axios.post('/api/posts', this.post)
+        axios.post('/posts', this.post)
         .then(response => {
             this.index();
             this.post = {id:'', title: '', description: ''}
@@ -99,7 +103,7 @@ export default {
     },
 
     update(){
-        axios.put('/api/posts/'+ this.post.id, this.post)
+        axios.put('/posts/'+ this.post.id, this.post)
         .then(response => {
             this.index();
             this.post = {id:'', title: '', description: ''}
@@ -113,11 +117,32 @@ export default {
     },
 
     destroy(id){
-        if(!confirm("Are you sure to delete this post")){
-            return;
+        Swal.fire({
+        title: 'Are you sure?',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        },
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete!'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete('/posts/'+ id)
+            .then(response => {
+                this.index()
+                Swal.fire({ title: 'Deleted!!', icon: 'success' })
+            })
         }
-        axios.delete('/api/posts/'+ id)
-        .then(response => this.index())
+        })
+    },
+    logout(){
+        localStorage.clear();
+        this.$router.push('/')
     }
 
   },
@@ -129,6 +154,6 @@ export default {
 
 <style>
     .float-end {
-        margin-right: 280px;
+        margin-right: 145px;
     }
 </style>
