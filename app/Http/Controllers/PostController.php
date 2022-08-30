@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -23,9 +24,18 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'image' => 'nullable'
         ]);
-        return Post::create($request->only('title', 'description'));
+        $requestData =$request->all();
+        if($request->hasFile('image')){
+            $fileName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $fileName);
+            $requestData['image'] = '/images/'.$fileName;
+        }else{
+            $requestData['image'] = '/images/profile.png';
+        }
+        return Post::create($requestData);
     }
     public function update(Request $request, Post $post)
     {

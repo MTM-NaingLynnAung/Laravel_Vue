@@ -14,8 +14,8 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('{any}', function () {
+    return view('layouts.app');
+})->where('any', '.*');
 
 Route::resource('posts', PostController::class);
