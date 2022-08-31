@@ -32,14 +32,14 @@
 export default {
   data(){
     return {
-       post: {
+      post: {
         id: '',
         title: '',
         description: '',
         image: ''
       },
       errorMessage: false,
-      error: [],
+      errors: [],
       imagePreview: null,
       showPreview: false,
     }
@@ -56,7 +56,6 @@ export default {
         .then(response => {
             this.$router.push({ name: 'PostIndex' })
             this.errorMessage = false
-            console.log(this.post)
         })
         .catch(error => {
             this.errors = error.response.data.errors

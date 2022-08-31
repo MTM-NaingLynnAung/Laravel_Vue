@@ -5377,7 +5377,7 @@ __webpack_require__.r(__webpack_exports__);
         image: ''
       },
       errorMessage: false,
-      error: [],
+      errors: [],
       imagePreview: null,
       showPreview: false
     };
@@ -5397,7 +5397,6 @@ __webpack_require__.r(__webpack_exports__);
         });
 
         _this.errorMessage = false;
-        console.log(_this.post);
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
         _this.errorMessage = true;
@@ -5461,16 +5460,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5478,10 +5467,11 @@ __webpack_require__.r(__webpack_exports__);
         id: "",
         title: "",
         description: "",
-        image: ""
+        image: "",
+        _method: "PUT"
       },
       errorMessage: false,
-      error: [],
+      errors: [],
       imagePreview: null
     };
   },
@@ -5489,8 +5479,17 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       var _this = this;
 
-      console.log('update', this.post);
-      axios.put("/api/posts/" + this.post.id, this.post).then(function (response) {
+      var config = {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      };
+      var formData = new FormData();
+      formData.append("id", this.post.id);
+      formData.append("title", this.post.title);
+      formData.append("description", this.post.description);
+      formData.append("image", this.post.image);
+      axios.post("/api/post-update/".concat(this.post.id), formData, config).then(function (response) {
         _this.$router.push({
           name: "PostIndex"
         });
@@ -5503,7 +5502,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     onChange: function onChange(e) {
       this.post.image = e.target.files[0];
-      console.log(this.post);
       var reader = new FileReader();
       reader.addEventListener("load", function () {
         this.imagePreview = reader.result;
@@ -5579,8 +5577,7 @@ __webpack_require__.r(__webpack_exports__);
         title: '',
         description: '',
         image: ''
-      },
-      errorMessage: false
+      }
     };
   },
   created: function created() {
@@ -5612,14 +5609,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       axios.get('/api/posts/' + id).then(function (response) {
-        console.log(response.data);
         _this4.post = response.data;
 
         _this4.$router.push({
           name: 'PostEdit'
         });
-      })["catch"](function (error) {
-        console.log(error);
       });
     }
   }
@@ -29356,7 +29350,7 @@ var render = function () {
       [
         _c("div", { staticClass: "col-4" }, [
           _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "" } }, [_vm._v("Title : ")]),
+            _c("label", [_vm._v("Title : ")]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -29396,7 +29390,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "" } }, [_vm._v("Description : ")]),
+            _c("label", [_vm._v("Description : ")]),
             _vm._v(" "),
             _c("textarea", {
               directives: [
@@ -29435,11 +29429,11 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "" } }, [_vm._v("Image :")]),
+            _c("label", [_vm._v("Image :")]),
             _vm._v(" "),
             _c("input", {
               staticClass: "form-control mb-3",
-              attrs: { type: "file", name: "image" },
+              attrs: { type: "file", name: "image", accept: "image/*" },
               on: { change: _vm.onChange },
             }),
             _vm._v(" "),
@@ -29510,7 +29504,7 @@ var render = function () {
               },
             ],
             staticClass: "form-control search",
-            attrs: { type: "search" },
+            attrs: { type: "search", placeholder: "Search Title ... " },
             domProps: { value: _vm.search },
             on: {
               input: function ($event) {

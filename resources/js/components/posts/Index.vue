@@ -3,7 +3,7 @@
     <h2>Post List</h2>
     <router-link :to="{ name: 'PostCreate' }" class="btn btn-sm btn-primary">Add Post</router-link>
     <div class="float-end col-3" @keyup="searchPost">
-      <input type="search" class="form-control search" v-model="search">
+      <input type="search" class="form-control search" v-model="search" placeholder="Search Title ... ">
     </div>
     <table class="table mt-5">
       <tr>
@@ -40,8 +40,7 @@ export default {
         title: '',
         description: '',
         image: ''
-      },
-      errorMessage: false
+      }
     }
   },
   created(){
@@ -64,12 +63,8 @@ export default {
     edit(id){
       axios.get('/api/posts/'+ id)
           .then(response => {
-            console.log(response.data)  
             this.post = response.data
             this.$router.push({name: 'PostEdit'})
-          })
-          .catch(error => {
-            console.log(error)
           })
     },
   }

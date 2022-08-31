@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Log;
 
 class PostController extends Controller
 {
@@ -39,23 +38,20 @@ class PostController extends Controller
         return Post::create($requestData);
     }
 
-    public function edit(Post $post)
+    public function update(Request $request)
     {
-       return view('posts.edit', compact('post'));
-    }
-    public function update(Request $request, Post $post)
-    {
-        Log::alert("message");
-        Log::alert($request);
+        $post = Post::find($request->id);
         $request->validate([
             'title' => 'required',
             'description' => 'required',
         ]);
-        $requestData =$request->all();
-        $fileName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images'), $fileName);
-        $requestData['image'] = '/images/'.$fileName;
         
+        $requestData =$request->all();
+        if($request->hasFile('image')) {
+            $fileName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $fileName);
+            $requestData['image'] = '/images/'.$fileName;
+        }
         return $post->update($requestData);
     }
     public function destroy(Post $post)
