@@ -37,7 +37,6 @@ export default {
                 title: "",
                 description: "",
                 image: "",
-                _method: "PUT",
             },
             errorMessage: false,
             errors: [],

@@ -5471,8 +5471,7 @@ __webpack_require__.r(__webpack_exports__);
         id: "",
         title: "",
         description: "",
-        image: "",
-        _method: "PUT"
+        image: ""
       },
       errorMessage: false,
       errors: [],
@@ -5746,34 +5745,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_posts_Index_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/posts/Index.vue */ "./resources/js/components/posts/Index.vue");
 /* harmony import */ var _components_posts_Create_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/posts/Create.vue */ "./resources/js/components/posts/Create.vue");
 /* harmony import */ var _components_posts_Edit_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/posts/Edit.vue */ "./resources/js/components/posts/Edit.vue");
-// import TestComponent from './components/TestComponent.vue'
-// import PostComponent from './components/PostComponent.vue'
-// import Vue from 'vue';
-// import VueRouter from 'vue-router';
-// const router = new VueRouter({
-//   mode: 'history',
-//   routes: [
-//     {
-//       path: '/',
-//       component: TestComponent,
-//     },
-//     {
-//       path: '/vue/posts',
-//       component: PostComponent,
-//       name: 'posts',
-//       beforeEnter: (to, from, next) => {
-//        let auth = localStorage.getItem('auth');
-//        if(auth){
-//          next()
-//        }else {
-//         next('/')
-//        }
-//       }
-//     }
-//   ]
-// });
-// Vue.use(VueRouter)
-// export default router;
 
 
 
