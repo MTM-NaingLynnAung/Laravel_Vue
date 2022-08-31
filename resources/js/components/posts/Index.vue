@@ -57,8 +57,24 @@ export default {
         .then(response => this.posts = response.data)
     },
     destroy(id){
-      axios.delete('/api/posts/'+ id)
-      .then(response => this.getPost())
+      Swal.fire({
+      title: 'Are you sure to Delete?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Delete'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete('/api/posts/'+ id)
+        .then(response =>{
+          this.getPost()
+          Swal.fire({ title: 'Deleted', icon: 'success' })
+          Toast.fire({ icon: 'success', title: 'Deleted successfully'})
+        })
+      }
+    })
+      
     },
     edit(id){
       axios.get('/api/posts/'+ id)

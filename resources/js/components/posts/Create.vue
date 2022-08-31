@@ -56,6 +56,7 @@ export default {
         .then(response => {
             this.$router.push({ name: 'PostIndex' })
             this.errorMessage = false
+            Toast.fire({ icon: 'success', title: 'Created successfully'})
         })
         .catch(error => {
             this.errors = error.response.data.errors
