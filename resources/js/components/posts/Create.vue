@@ -51,11 +51,12 @@ export default {
       formData.append('title', this.post.title);
       formData.append('description', this.post.description);
       formData.append('image', this.post.image);
+      
       axios.post('/posts', formData)
         .then(response => {
-            console.log(response)
             this.$router.push({ name: 'PostIndex' })
             this.errorMessage = false
+            console.log(this.post)
         })
         .catch(error => {
             this.errors = error.response.data.errors

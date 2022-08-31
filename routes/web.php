@@ -19,3 +19,5 @@ Route::get('{any}', function () {
 })->where('any', '.*');
 
 Route::resource('posts', PostController::class);
+
+

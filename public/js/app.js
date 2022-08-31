@@ -5392,13 +5392,12 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('description', this.post.description);
       formData.append('image', this.post.image);
       axios.post('/posts', formData).then(function (response) {
-        console.log(response);
-
         _this.$router.push({
           name: 'PostIndex'
         });
 
         _this.errorMessage = false;
+        console.log(_this.post);
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
         _this.errorMessage = true;
@@ -5462,31 +5461,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       post: {
-        id: '',
-        title: '',
-        description: '',
-        image: ''
+        id: "",
+        title: "",
+        description: "",
+        image: ""
       },
       errorMessage: false,
       error: [],
-      imagePreview: null,
-      showPreview: false
+      imagePreview: null
     };
   },
   methods: {
-    openUpload: function openUpload() {
-      document.getElementById();
-    },
     update: function update() {
       var _this = this;
 
-      axios.put('/api/posts/' + this.post.id, this.post).then(function (response) {
+      console.log('update', this.post);
+      axios.put("/api/posts/" + this.post.id, this.post).then(function (response) {
         _this.$router.push({
-          name: 'PostIndex'
+          name: "PostIndex"
         });
 
         _this.errorMessage = false;
@@ -5494,14 +5500,27 @@ __webpack_require__.r(__webpack_exports__);
         _this.errors = error.response.data.errors;
         _this.errorMessage = true;
       });
+    },
+    onChange: function onChange(e) {
+      this.post.image = e.target.files[0];
+      console.log(this.post);
+      var reader = new FileReader();
+      reader.addEventListener("load", function () {
+        this.imagePreview = reader.result;
+      }.bind(this), false);
+
+      if (this.post.image) {
+        reader.readAsDataURL(this.post.image);
+      }
     }
   },
   created: function created() {
     var _this2 = this;
 
     this.post.id = this.$route.params.id;
-    axios.get('/api/posts/' + this.post.id).then(function (response) {
-      return _this2.post = response.data;
+    axios.get("/api/posts/" + this.post.id).then(function (response) {
+      _this2.post = response.data;
+      _this2.imagePreview = _this2.post.image;
     });
   }
 });
@@ -29326,6 +29345,7 @@ var render = function () {
     _c(
       "form",
       {
+        attrs: { enctype: "multipart/form-data" },
         on: {
           submit: function ($event) {
             $event.preventDefault()
@@ -29418,16 +29438,13 @@ var render = function () {
             _c("label", { attrs: { for: "" } }, [_vm._v("Image :")]),
             _vm._v(" "),
             _c("input", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.post.image,
-                  expression: "post.image",
-                },
-              ],
-              staticClass: "form-control",
-              attrs: { type: "file" },
+              staticClass: "form-control mb-3",
+              attrs: { type: "file", name: "image" },
+              on: { change: _vm.onChange },
+            }),
+            _vm._v(" "),
+            _c("img", {
+              attrs: { src: _vm.imagePreview, width: "100", height: "100" },
             }),
           ]),
           _vm._v(" "),
