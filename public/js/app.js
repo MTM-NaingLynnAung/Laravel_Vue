@@ -5322,7 +5322,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      posts: [],
+      search: ''
+    };
+  },
+  methods: {
+    searchPost: function searchPost() {
+      var _this = this;
+
+      axios.get('/api/posts/?search=' + this.search).then(function (response) {
+        return _this.posts = response.data;
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -5543,10 +5578,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
 //
 //
 //
@@ -33231,23 +33262,113 @@ var render = function () {
     "div",
     { staticClass: "container" },
     [
-      _c(
-        "nav",
-        { staticClass: "my-5" },
-        [
-          _c("router-link", { attrs: { to: { name: "PostIndex" } } }, [
-            _vm._v("See All Posts"),
-          ]),
-        ],
-        1
-      ),
+      _c("nav", { staticClass: "navbar navbar-expand-lg bg-light" }, [
+        _c("div", { staticClass: "container-fluid" }, [
+          _c("h1", [_vm._v("Laravel + VueJs")]),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse navbar-collapse",
+              attrs: { id: "navbarSupportedContent" },
+            },
+            [
+              _c(
+                "ul",
+                { staticClass: "navbar-nav me-auto mb-2 mb-lg-0 ms-3" },
+                [
+                  _c(
+                    "li",
+                    { staticClass: "nav-item" },
+                    [
+                      _c(
+                        "router-link",
+                        { attrs: { to: { name: "PostIndex" } } },
+                        [_vm._v("Post List")]
+                      ),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    { staticClass: "nav-item" },
+                    [
+                      _c(
+                        "router-link",
+                        { attrs: { to: { name: "UserIndex" } } },
+                        [_vm._v("User List")]
+                      ),
+                    ],
+                    1
+                  ),
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "float-end col-3",
+                  on: { keyup: _vm.searchPost },
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.search,
+                        expression: "search",
+                      },
+                    ],
+                    staticClass: "form-control search",
+                    attrs: { type: "search", placeholder: "Search Title ... " },
+                    domProps: { value: _vm.search },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.search = $event.target.value
+                      },
+                    },
+                  }),
+                ]
+              ),
+            ]
+          ),
+        ]),
+      ]),
       _vm._v(" "),
       _c("router-view"),
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "navbar-toggler",
+        attrs: {
+          type: "button",
+          "data-bs-toggle": "collapse",
+          "data-bs-target": "#navbarSupportedContent",
+          "aria-controls": "navbarSupportedContent",
+          "aria-expanded": "false",
+          "aria-label": "Toggle navigation",
+        },
+      },
+      [_c("span", { staticClass: "navbar-toggler-icon" })]
+    )
+  },
+]
 render._withStripped = true
 
 
@@ -33566,8 +33687,6 @@ var render = function () {
     "div",
     { staticClass: "container" },
     [
-      _c("h2", [_vm._v("Post List")]),
-      _vm._v(" "),
       _c(
         "router-link",
         {
@@ -33575,34 +33694,6 @@ var render = function () {
           attrs: { to: { name: "PostCreate" } },
         },
         [_vm._v("Add Post")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "float-end col-3", on: { keyup: _vm.searchPost } },
-        [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.search,
-                expression: "search",
-              },
-            ],
-            staticClass: "form-control search",
-            attrs: { type: "search", placeholder: "Search Title ... " },
-            domProps: { value: _vm.search },
-            on: {
-              input: function ($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.search = $event.target.value
-              },
-            },
-          }),
-        ]
       ),
       _vm._v(" "),
       _c(

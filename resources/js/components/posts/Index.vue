@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-    <h2>Post List</h2>
     <router-link :to="{ name: 'PostCreate' }" class="btn btn-sm btn-primary">Add Post</router-link>
-    <div class="float-end col-3" @keyup="searchPost">
-      <input type="search" class="form-control search" v-model="search" placeholder="Search Title ... ">
-    </div>
     <table class="table mt-5">
       <tr>
         <th>ID</th>

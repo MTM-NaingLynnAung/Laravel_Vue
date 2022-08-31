@@ -1,7 +1,26 @@
 <template>
     <div class="container">
-      <nav class="my-5">
-        <router-link :to= "{ name: 'PostIndex' }">See All Posts</router-link>
+      <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <h1>Laravel + VueJs</h1>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3">
+              <li class="nav-item">
+                <router-link :to="{ name: 'PostIndex' }" class="">Post List</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'UserIndex' }" class="">User List</router-link>
+              </li>
+             
+            </ul>
+             <div class="float-end col-3" @keyup="searchPost">
+                <input type="search" class="form-control search" v-model="search" placeholder="Search Title ... ">
+             </div>
+          </div>
+        </div>
       </nav>
             <router-view />
     </div>
@@ -9,7 +28,18 @@
 
 <script>
 export default {
-
+  data(){
+    return {
+      posts: [],
+      search: ''
+    }
+  },
+  methods: {
+    searchPost(){
+      axios.get('/api/posts/?search='+ this.search)
+      .then(response => this.posts = response.data)
+    },
+  }
 }
 </script>
 
