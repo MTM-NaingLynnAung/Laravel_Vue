@@ -1,6 +1,14 @@
 <template>
   <div class="container">
-    <router-link :to="{ name: 'PostCreate' }" class="btn btn-sm btn-primary">Add Post</router-link>
+    <div class="d-flex justify-content-between">
+      <router-link :to="{ name: 'PostCreate' }" class="btn btn-primary">Add Post</router-link>
+
+      <div class="float-end col-4 d-flex" @keyup="searchPost" style="margin-right: 200px;">
+        <button class="btn btn-primary me-3" @click="importFile">Import</button>
+        <a :href="url" class="btn btn-dark me-3" @click="download">Download</a>
+        <input type="search" class="form-control search" v-model="search" placeholder="Search Title ... ">
+      </div> 
+    </div>
     <table class="table mt-5">
       <tr>
         <th>ID</th>
@@ -36,7 +44,8 @@ export default {
         title: '',
         description: '',
         image: ''
-      }
+      },
+      url: '',
     }
   },
   created(){
@@ -46,6 +55,47 @@ export default {
     searchPost(){
       axios.get('/api/posts/?search='+ this.search)
       .then(response => this.posts = response.data)
+    },
+
+    importFile(){
+      Swal.fire({
+        title: 'Import File',
+        html: `
+        <form enctype="multipart/form-data" id="postCsv">
+          <input type="file" name="import" class="form-control">
+        </form>
+        `,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Import'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let postCsv = document.getElementById('postCsv');
+          let formData = new FormData(postCsv);
+          axios.post('/api/import', formData)
+          .then(response =>{
+            this.$router.push({ name: "PostIndex" });
+            this.posts = response.data
+          })
+          Toast.fire({ icon: 'success', title: 'Import successfully'})
+        }
+      })
+    },
+
+    // importFile(){
+    //   let postCsv = document.getElementById('postCsv');
+    //   let formData = new FormData(postCsv);
+    //   axios.post('/api/import', formData)
+    //   .then(response =>{
+    //     this.$router.push({ name: "PostIndex" });
+    //     this.posts = response.data
+    //   })
+    //   .catch(error => console.log(error))
+    // },
+
+    download(){
+      this.url = "/api/export";
     },
 
     getPost(){
@@ -79,12 +129,16 @@ export default {
             this.$router.push({name: 'PostEdit'})
           })
     },
-  }
+  },
+  
 }
 </script>
 
 <style>
-  .float-end {
+  /* .float-end {
     margin-right: 145px;
+  } */
+  .swal2-styled{
+    font-size: 14px!important;
   }
 </style>

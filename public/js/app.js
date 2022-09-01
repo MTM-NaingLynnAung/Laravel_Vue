@@ -5338,26 +5338,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
-    return {
-      posts: [],
-      search: ''
-    };
-  },
-  methods: {
-    searchPost: function searchPost() {
-      var _this = this;
-
-      axios.get('/api/posts/?search=' + this.search).then(function (response) {
-        return _this.posts = response.data;
-      });
-    }
-  }
-});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
 
 /***/ }),
 
@@ -5605,6 +5586,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5615,7 +5604,8 @@ __webpack_require__.r(__webpack_exports__);
         title: '',
         description: '',
         image: ''
-      }
+      },
+      url: ''
     };
   },
   created: function created() {
@@ -5629,15 +5619,56 @@ __webpack_require__.r(__webpack_exports__);
         return _this.posts = response.data;
       });
     },
-    getPost: function getPost() {
+    importFile: function importFile() {
       var _this2 = this;
 
+      Swal.fire({
+        title: 'Import File',
+        html: "\n        <form enctype=\"multipart/form-data\" id=\"postCsv\">\n          <input type=\"file\" name=\"import\" class=\"form-control\">\n        </form>\n        ",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Import'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          var postCsv = document.getElementById('postCsv');
+          var formData = new FormData(postCsv);
+          axios.post('/api/import', formData).then(function (response) {
+            _this2.$router.push({
+              name: "PostIndex"
+            });
+
+            _this2.posts = response.data;
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Import successfully'
+          });
+        }
+      });
+    },
+    // importFile(){
+    //   let postCsv = document.getElementById('postCsv');
+    //   let formData = new FormData(postCsv);
+    //   axios.post('/api/import', formData)
+    //   .then(response =>{
+    //     this.$router.push({ name: "PostIndex" });
+    //     this.posts = response.data
+    //   })
+    //   .catch(error => console.log(error))
+    // },
+    download: function download() {
+      this.url = "/api/export";
+    },
+    getPost: function getPost() {
+      var _this3 = this;
+
       axios.get('/api/posts').then(function (response) {
-        return _this2.posts = response.data;
+        return _this3.posts = response.data;
       });
     },
     destroy: function destroy(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       Swal.fire({
         title: 'Are you sure to Delete?',
@@ -5649,7 +5680,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.isConfirmed) {
           axios["delete"]('/api/posts/' + id).then(function (response) {
-            _this3.getPost();
+            _this4.getPost();
 
             Swal.fire({
               title: 'Deleted',
@@ -5664,12 +5695,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     edit: function edit(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/api/posts/' + id).then(function (response) {
-        _this4.post = response.data;
+        _this5.post = response.data;
 
-        _this4.$router.push({
+        _this5.$router.push({
           name: 'PostEdit'
         });
       });
@@ -11044,7 +11075,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.float-end {\n  margin-right: 145px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .float-end {\n  margin-right: 145px;\n} */\n.swal2-styled{\n  font-size: 14px!important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -33262,7 +33293,7 @@ var render = function () {
     "div",
     { staticClass: "container" },
     [
-      _c("nav", { staticClass: "navbar navbar-expand-lg bg-light" }, [
+      _c("nav", { staticClass: "navbar navbar-expand-lg bg-light mb-5" }, [
         _c("div", { staticClass: "container-fluid" }, [
           _c("h1", [_vm._v("Laravel + VueJs")]),
           _vm._v(" "),
@@ -33304,37 +33335,6 @@ var render = function () {
                     ],
                     1
                   ),
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "float-end col-3",
-                  on: { keyup: _vm.searchPost },
-                },
-                [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.search,
-                        expression: "search",
-                      },
-                    ],
-                    staticClass: "form-control search",
-                    attrs: { type: "search", placeholder: "Search Title ... " },
-                    domProps: { value: _vm.search },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.search = $event.target.value
-                      },
-                    },
-                  }),
                 ]
               ),
             ]
@@ -33683,79 +33683,127 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container" },
-    [
-      _c(
-        "router-link",
-        {
-          staticClass: "btn btn-sm btn-primary",
-          attrs: { to: { name: "PostCreate" } },
-        },
-        [_vm._v("Add Post")]
-      ),
-      _vm._v(" "),
-      _c(
-        "table",
-        { staticClass: "table mt-5" },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._l(_vm.posts, function (post) {
-            return _c("tr", { key: post.id }, [
-              _c("td", [_vm._v(_vm._s(post.id))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(post.title))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(post.description))]),
-              _vm._v(" "),
-              _c("td", [
-                _c("img", {
-                  attrs: {
-                    src: post.image,
-                    alt: "",
-                    width: "70",
-                    height: "70",
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "div",
+      { staticClass: "d-flex justify-content-between" },
+      [
+        _c(
+          "router-link",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { to: { name: "PostCreate" } },
+          },
+          [_vm._v("Add Post")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "float-end col-4 d-flex",
+            staticStyle: { "margin-right": "200px" },
+            on: { keyup: _vm.searchPost },
+          },
+          [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary me-3",
+                on: { click: _vm.importFile },
+              },
+              [_vm._v("Import")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-dark me-3",
+                attrs: { href: _vm.url },
+                on: { click: _vm.download },
+              },
+              [_vm._v("Download")]
+            ),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.search,
+                  expression: "search",
+                },
+              ],
+              staticClass: "form-control search",
+              attrs: { type: "search", placeholder: "Search Title ... " },
+              domProps: { value: _vm.search },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.search = $event.target.value
+                },
+              },
+            }),
+          ]
+        ),
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "table",
+      { staticClass: "table mt-5" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._l(_vm.posts, function (post) {
+          return _c("tr", { key: post.id }, [
+            _c("td", [_vm._v(_vm._s(post.id))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(post.title))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(post.description))]),
+            _vm._v(" "),
+            _c("td", [
+              _c("img", {
+                attrs: { src: post.image, alt: "", width: "70", height: "70" },
+              }),
+            ]),
+            _vm._v(" "),
+            _c(
+              "td",
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-sm btn-secondary text-dark",
+                    attrs: { to: "/posts/edit/" + post.id },
                   },
-                }),
-              ]),
-              _vm._v(" "),
-              _c(
-                "td",
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "btn btn-sm btn-secondary text-dark",
-                      attrs: { to: "/posts/edit/" + post.id },
-                    },
-                    [_vm._v("Edit")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm btn-danger text-dark ms-1",
-                      on: {
-                        click: function ($event) {
-                          return _vm.destroy(post.id)
-                        },
+                  [_vm._v("Edit")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-danger text-dark ms-1",
+                    on: {
+                      click: function ($event) {
+                        return _vm.destroy(post.id)
                       },
                     },
-                    [_vm._v("Delete")]
-                  ),
-                ],
-                1
-              ),
-            ])
-          }),
-        ],
-        2
-      ),
-    ],
-    1
-  )
+                  },
+                  [_vm._v("Delete")]
+                ),
+              ],
+              1
+            ),
+          ])
+        }),
+      ],
+      2
+    ),
+  ])
 }
 var staticRenderFns = [
   function () {

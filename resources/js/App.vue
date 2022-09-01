@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <nav class="navbar navbar-expand-lg bg-light">
+      <nav class="navbar navbar-expand-lg bg-light mb-5">
         <div class="container-fluid">
           <h1>Laravel + VueJs</h1>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,9 +16,6 @@
               </li>
              
             </ul>
-             <div class="float-end col-3" @keyup="searchPost">
-                <input type="search" class="form-control search" v-model="search" placeholder="Search Title ... ">
-             </div>
           </div>
         </div>
       </nav>
@@ -28,18 +25,7 @@
 
 <script>
 export default {
-  data(){
-    return {
-      posts: [],
-      search: ''
-    }
-  },
-  methods: {
-    searchPost(){
-      axios.get('/api/posts/?search='+ this.search)
-      .then(response => this.posts = response.data)
-    },
-  }
+  
 }
 </script>
 
