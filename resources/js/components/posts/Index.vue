@@ -82,18 +82,7 @@ export default {
         }
       })
     },
-
-    // importFile(){
-    //   let postCsv = document.getElementById('postCsv');
-    //   let formData = new FormData(postCsv);
-    //   axios.post('/api/import', formData)
-    //   .then(response =>{
-    //     this.$router.push({ name: "PostIndex" });
-    //     this.posts = response.data
-    //   })
-    //   .catch(error => console.log(error))
-    // },
-
+    
     download(){
       this.url = "/api/export";
     },

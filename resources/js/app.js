@@ -20,13 +20,30 @@ window.Toast = Swal.mixin({
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
   })
-  
-
 
 const router = new VueRouter({
     mode: 'history',
     routes: routes
 });
+
+function loggedIn(){
+  return false
+}
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)){
+    if(!loggedIn()){
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }else{
+      next()
+    }
+  }else{
+    next()
+  }
+})
 
 const app = new Vue({
     el: '#app',

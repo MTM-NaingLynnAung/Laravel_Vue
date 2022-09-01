@@ -13,3 +13,7 @@ Route::get('import/file', [PostController::class, 'import_file']);
 
 
 Route::apiResource('users', UserController::class);
+Route::post('user-update/{id}', [UserController::class, 'update']);
+
+Route::post('login', [UserController::class, 'login']);
+Route::get('logout', [UserController::class, 'logout']);
