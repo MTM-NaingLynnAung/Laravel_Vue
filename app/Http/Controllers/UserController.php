@@ -26,7 +26,7 @@ class UserController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
         $user = Auth::user();
-        return $user;
+        return $user->createToken($request->token)->plainTextToken;
     }
 
     public function logout()
@@ -52,6 +52,7 @@ class UserController extends Controller
             'password' => 'required',
             'confirm_password' => 'required|same:password'
         ]);
+        $request->created_user_id = Auth::user()->id;
         $requestData = $request->all();
         if($request->hasFile('image')){
             $fileName = time().'.'.$request->image->extension();
@@ -65,7 +66,8 @@ class UserController extends Controller
             'name' => $requestData['name'],
             'email' => $requestData['email'],
             'password' => bcrypt($requestData['password']),
-            'image' => $requestData['image']
+            'image' => $requestData['image'],
+            'created_user_id' => $requestData['created_user_id']
         ]);
     }
     public function update(Request $request)

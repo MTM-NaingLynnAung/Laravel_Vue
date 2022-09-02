@@ -39,7 +39,7 @@ export default {
     login(){
       axios.post('/api/login', this.user)
       .then(response => {
-        localStorage.setItem('userData', JSON.stringify(response.data))
+        localStorage.setItem('token', response.data)
         this.$router.push({name: 'UserIndex'})
         window.location.reload();
         

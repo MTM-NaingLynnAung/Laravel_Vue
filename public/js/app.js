@@ -5346,7 +5346,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      email: JSON.parse(localStorage.getItem('userData')).email
+      token: localStorage.getItem('token')
     };
   },
   methods: {
@@ -5421,7 +5421,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post('/api/login', this.user).then(function (response) {
-        localStorage.setItem('userData', JSON.stringify(response.data));
+        localStorage.setItem('token', response.data);
 
         _this.$router.push({
           name: 'UserIndex'
@@ -6151,7 +6151,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 });
 
 function loggedIn() {
-  return localStorage.getItem('userData');
+  return localStorage.getItem('token');
 }
 
 router.beforeEach(function (to, from, next) {
@@ -34055,8 +34055,8 @@ var render = function () {
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.email,
-              expression: "email",
+              value: _vm.token,
+              expression: "token",
             },
           ],
           staticClass: "navbar navbar-expand-lg bg-light mb-5",

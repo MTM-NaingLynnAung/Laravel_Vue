@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <nav class="navbar navbar-expand-lg bg-light mb-5" v-show="email">
+      <nav class="navbar navbar-expand-lg bg-light mb-5" v-show="token">
         <div class="container-fluid">
           <h1>Laravel + VueJs</h1>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
 export default {
   data(){
     return {
-      email: JSON.parse(localStorage.getItem('userData')).email
+      token: localStorage.getItem('token')
     }
   },
   methods: {
