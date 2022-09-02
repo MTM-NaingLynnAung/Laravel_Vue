@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -19,18 +20,20 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ];
-        if(Auth::attempt($credentials)){
-            return $credentials;
+        if(!Auth::attempt($credentials)){
+            return response([
+                'message' => 'Invalid credentials'
+            ], Response::HTTP_UNAUTHORIZED);
         }
-        return back()->withErrors([
-            'email' => '',
-            'password' => 'Email or Password is incorrect'
-        ]);
+        $user = Auth::user();
+        return $user;
     }
 
     public function logout()
     {
-       return Auth::logout();
+        $user = Auth::user();
+        $user->tokens()->delete();
+        return response()->json(['message' => 'Logout Successfully']);
     }
 
     public function index()
@@ -49,7 +52,6 @@ class UserController extends Controller
             'password' => 'required',
             'confirm_password' => 'required|same:password'
         ]);
-
         $requestData = $request->all();
         if($request->hasFile('image')){
             $fileName = time().'.'.$request->image->extension();
@@ -59,7 +61,12 @@ class UserController extends Controller
             $requestData['image'] = '/images/profile.png';
         }
         
-        return User::create($requestData);
+        return User::create([
+            'name' => $requestData['name'],
+            'email' => $requestData['email'],
+            'password' => bcrypt($requestData['password']),
+            'image' => $requestData['image']
+        ]);
     }
     public function update(Request $request)
     {

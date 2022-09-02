@@ -9,20 +9,30 @@ import UserEdit from './components/users/Edit.vue'
 import Login from './components/auth/Login.vue'
 
 export const routes = [
+
   {
     path: '/posts',
     component: PostIndex,
-    name: 'PostIndex'
+    name: 'PostIndex',
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/posts/create',
     component: PostCreate,
-    name: 'PostCreate'
+    name: 'PostCreate',
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/posts/edit/:id',
     component: PostEdit,
-    name: 'PostEdit'
+    name: 'PostEdit',
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/users',
@@ -35,19 +45,23 @@ export const routes = [
   {
     path: '/users/create',
     component: UserCreate,
-    name: 'UserCreate'
+    name: 'UserCreate',
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/users/edit/:id',
     component: UserEdit,
-    name: 'UserEdit'
+    name: 'UserEdit',
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
     component: Login,
     name: 'Login'
   }
-
-
 
 ];

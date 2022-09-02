@@ -52,7 +52,7 @@ export default {
       formData.append('description', this.post.description);
       formData.append('image', this.post.image);
       
-      axios.post('/posts', formData)
+      axios.post('/api/posts', formData)
         .then(response => {
             this.$router.push({ name: 'PostIndex' })
             this.errorMessage = false

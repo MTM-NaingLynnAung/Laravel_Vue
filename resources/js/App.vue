@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <nav class="navbar navbar-expand-lg bg-light mb-5">
+      <nav class="navbar navbar-expand-lg bg-light mb-5" v-show="email">
         <div class="container-fluid">
           <h1>Laravel + VueJs</h1>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,14 +17,36 @@
              
             </ul>
           </div>
+         
+          <button class="btn btn-danger" @click="logout">Logout</button>
         </div>
       </nav>
       <router-view />
+
+      <!-- <Login @login-status="showNav" /> -->
     </div>
 </template>
 
 <script>
+// import Login from './components/auth/Login.vue'
+
 export default {
+  data(){
+    return {
+      email: JSON.parse(localStorage.getItem('userData')).email
+    }
+  },
+  methods: {
+    logout(){
+      axios.post('/api/logout')
+      .then(response => {
+        window.location.reload()
+        localStorage.clear()
+        this.$router.push({ name: 'Login' })
+      })
+      .catch(error => console.log(error))
+    },
+  }
   
 }
 </script>

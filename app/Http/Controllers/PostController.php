@@ -36,8 +36,6 @@ class PostController extends Controller
             $fileName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $fileName);
             $requestData['image'] = '/images/'.$fileName;
-        }else{
-            $requestData['image'] = '/images/profile.png';
         }
         return Post::create($requestData);
     }

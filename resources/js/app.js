@@ -27,7 +27,7 @@ const router = new VueRouter({
 });
 
 function loggedIn(){
-  return false
+  return localStorage.getItem('userData')
 }
 
 router.beforeEach((to, from, next) => {

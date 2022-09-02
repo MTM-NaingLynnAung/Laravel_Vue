@@ -5338,7 +5338,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+//
+//
+//
+// import Login from './components/auth/Login.vue'
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      email: JSON.parse(localStorage.getItem('userData')).email
+    };
+  },
+  methods: {
+    logout: function logout() {
+      var _this = this;
+
+      axios.post('/api/logout').then(function (response) {
+        window.location.reload();
+        localStorage.clear();
+
+        _this.$router.push({
+          name: 'Login'
+        });
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -5372,13 +5399,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       user: {
         email: '',
-        password: ''
-      }
+        password: '',
+        token: 'browser'
+      },
+      message: {},
+      messageError: false // loginStatus: true
+
     };
   },
   methods: {
@@ -5386,10 +5421,19 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post('/api/login', this.user).then(function (response) {
+        localStorage.setItem('userData', JSON.stringify(response.data));
+
         _this.$router.push({
           name: 'UserIndex'
         });
-      });
+
+        window.location.reload();
+      })["catch"](function (error) {
+        _this.message = error.response.data.message;
+        _this.messageError = true;
+      }); // this.$emit('login-status', {
+      //   loginStatus: this.loginStatus
+      // })
     }
   }
 });
@@ -5461,7 +5505,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('title', this.post.title);
       formData.append('description', this.post.description);
       formData.append('image', this.post.image);
-      axios.post('/posts', formData).then(function (response) {
+      axios.post('/api/posts', formData).then(function (response) {
         _this.$router.push({
           name: 'PostIndex'
         });
@@ -6107,7 +6151,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 });
 
 function loggedIn() {
-  return false;
+  return localStorage.getItem('userData');
 }
 
 router.beforeEach(function (to, from, next) {
@@ -6202,15 +6246,24 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [{
   path: '/posts',
   component: _components_posts_Index_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-  name: 'PostIndex'
+  name: 'PostIndex',
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/posts/create',
   component: _components_posts_Create_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-  name: 'PostCreate'
+  name: 'PostCreate',
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/posts/edit/:id',
   component: _components_posts_Edit_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-  name: 'PostEdit'
+  name: 'PostEdit',
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/users',
   component: _components_users_Index_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -6221,11 +6274,17 @@ var routes = [{
 }, {
   path: '/users/create',
   component: _components_users_Create_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-  name: 'UserCreate'
+  name: 'UserCreate',
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/users/edit/:id',
   component: _components_users_Edit_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
-  name: 'UserEdit'
+  name: 'UserEdit',
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/login',
   component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
@@ -33989,54 +34048,74 @@ var render = function () {
     "div",
     { staticClass: "container" },
     [
-      _c("nav", { staticClass: "navbar navbar-expand-lg bg-light mb-5" }, [
-        _c("div", { staticClass: "container-fluid" }, [
-          _c("h1", [_vm._v("Laravel + VueJs")]),
-          _vm._v(" "),
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "div",
+      _c(
+        "nav",
+        {
+          directives: [
             {
-              staticClass: "collapse navbar-collapse",
-              attrs: { id: "navbarSupportedContent" },
+              name: "show",
+              rawName: "v-show",
+              value: _vm.email,
+              expression: "email",
             },
-            [
-              _c(
-                "ul",
-                { staticClass: "navbar-nav me-auto mb-2 mb-lg-0 ms-3" },
-                [
-                  _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        { attrs: { to: { name: "PostIndex" } } },
-                        [_vm._v("Post List")]
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        { attrs: { to: { name: "UserIndex" } } },
-                        [_vm._v("User List")]
-                      ),
-                    ],
-                    1
-                  ),
-                ]
-              ),
-            ]
-          ),
-        ]),
-      ]),
+          ],
+          staticClass: "navbar navbar-expand-lg bg-light mb-5",
+        },
+        [
+          _c("div", { staticClass: "container-fluid" }, [
+            _c("h1", [_vm._v("Laravel + VueJs")]),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse navbar-collapse",
+                attrs: { id: "navbarSupportedContent" },
+              },
+              [
+                _c(
+                  "ul",
+                  { staticClass: "navbar-nav me-auto mb-2 mb-lg-0 ms-3" },
+                  [
+                    _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: { name: "PostIndex" } } },
+                          [_vm._v("Post List")]
+                        ),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: { name: "UserIndex" } } },
+                          [_vm._v("User List")]
+                        ),
+                      ],
+                      1
+                    ),
+                  ]
+                ),
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-danger", on: { click: _vm.logout } },
+              [_vm._v("Logout")]
+            ),
+          ]),
+        ]
+      ),
       _vm._v(" "),
       _c("router-view"),
     ],
@@ -34152,6 +34231,15 @@ var render = function () {
                 },
               },
             }),
+            _vm._v(" "),
+            _vm.messageError
+              ? _c("div", [
+                  _c("p", {
+                    staticClass: "alert alert-danger",
+                    domProps: { textContent: _vm._s(_vm.message) },
+                  }),
+                ])
+              : _vm._e(),
           ]),
           _vm._v(" "),
           _c(
