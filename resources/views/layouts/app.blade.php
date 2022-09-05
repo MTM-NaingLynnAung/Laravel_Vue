@@ -32,6 +32,10 @@
        <div id="app">
         
        </div>
+       <script>
+          window.user = @json(auth()->user());
+          window.user_type = @json(auth()->user()->user_type);
+       </script>
        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>

@@ -25,6 +25,7 @@ class PostsExport implements FromCollection, WithMapping, WithHeadings
             $post->title,
             $post->description,
             $post->image,
+            $post->created_user_id
         ];
     }
 
@@ -34,7 +35,8 @@ class PostsExport implements FromCollection, WithMapping, WithHeadings
             'ID',
             'Title',
             'Description',
-            'Image'
+            'Image',
+            'UserId'
         ];
     }
 }

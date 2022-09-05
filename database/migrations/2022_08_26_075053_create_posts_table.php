@@ -20,7 +20,8 @@ class CreatePostsTable extends Migration
             $table->string('image')->nullable();
             $table->unsignedBigInteger('created_user_id');
             $table->foreign('created_user_id')->references('id')->on('users');
-            $table->timestamps();
+            $table->timestamp('created_at')->userCurrent();
+            $table->timestamp('updated_at')->userCurrent();
         });
     }
 

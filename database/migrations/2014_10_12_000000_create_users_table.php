@@ -17,11 +17,13 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('user_type')->default(1);
             $table->string('password');
             $table->string('image')->nullable();
             $table->unsignedBigInteger('created_user_id');
-            $table->foreign('created_user_id')->references('id')->on('users');
-            $table->timestamps();
+            $table->foreign('created_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamp('created_at')->userCurrent();
+            $table->timestamp('updated_at')->userCurrent();
         });
     }
 

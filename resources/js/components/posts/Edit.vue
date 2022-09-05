@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h3>Edit Post</h3>
+    <h3 class="text-center">Edit Post</h3>
     <form @submit.prevent="update()" enctype="multipart/form-data">
-      <div class="col-4">
+      <div class="col-4 m-auto">
         <div class="form-group">
           <label>Title : </label>
           <input type="text" v-model="post.title" class="form-control" />

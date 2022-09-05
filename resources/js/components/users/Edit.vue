@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    <h2>Edit User</h2>
     <form @submit.prevent="update()" enctype="multipart/form-data">
-     <div class="col-4">
+     <div class="col-4 m-auto">
+        <div class="d-flex justify-content-center">
+          <img :src="imagePreview" width="100" height="100" alt="Profile">
+        </div>
         <div class="form-group">
           <label for="">Name</label>
           <input type="text" class="form-control" v-model="user.name">
@@ -17,11 +19,17 @@
             <p v-for="error in errors.email" :key="error" class="alert alert-danger">{{ error }}</p>
           </div>
         </div>
-        
+        <div class="form-group">
+          <label for="">User Type</label>
+          <select class="form-control" name="user_type" v-model="user_type">
+            <option value="" disabled>Please Select User Type</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+        </div>
         <div class="form-group">
           <label for="">Profile</label>
           <input type="file" class="form-control" @change="onChange"> 
-          <img :src="imagePreview" width="100" height="100" alt="Profile" class="mt-3">
         </div>
         <button class="btn btn-primary mt-3" type="submit">Update</button>
      </div>
@@ -40,6 +48,7 @@ export default {
         email: '',
         image: '',
       },
+      user_type: '',
       imagePreview: null,
       errors: [],
       errorMessage: false
@@ -63,6 +72,7 @@ export default {
       formData.append('name', this.user.name)
       formData.append('email', this.user.email)
       formData.append('image', this.user.image)
+      formData.append('user_type', this.user_type)
       axios.post(`/api/user-update/${this.user.id}`, formData)
       .then(response => {
         this.$router.push({name: 'UserIndex'})

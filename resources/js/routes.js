@@ -8,6 +8,8 @@ import UserEdit from './components/users/Edit.vue'
 
 import Login from './components/auth/Login.vue'
 
+import ErrorPage from './components/Error.vue'
+
 export const routes = [
 
   {
@@ -62,6 +64,11 @@ export const routes = [
     path: '/login',
     component: Login,
     name: 'Login'
-  }
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'ErrorPage',
+    component: ErrorPage
+ }
 
 ];

@@ -1,11 +1,12 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="user.user_type == 0">
     <router-link :to="{ name: 'UserCreate' }" class="btn btn-primary">Create User</router-link>
     <table class="table mt-5">
       <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
+        <th>User Type</th>
         <th>Profile</th>
         <th>Action</th>
       </tr>
@@ -13,6 +14,7 @@
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
+        <td>{{ user.user_type == 0 ? 'Admin' : 'User' }}</td>
         <td>
           <img :src="user.image" width="70" height="70" alt="Profile">
         </td>
@@ -34,17 +36,26 @@ export default {
         id: '',
         name: '',
         email: '',
-        image: ''
-      }
+        image: '',
+        user_type: ''
+      },
     }
   },
   created(){
     this.getUser()
   },
+  mounted(){
+    this.user.user_type = window.user_type
+    if(this.user.user_type != 0){
+      this.$router.push('/error')
+    }
+  },
   methods: {
     getUser(){
       axios.get('/api/users')
-      .then(response => this.users = response.data)
+      .then(response => {
+        this.users = response.data
+      })
     },
     destroy(id){
       Swal.fire({
@@ -64,7 +75,6 @@ export default {
           })
         }
       })
-
     }
   }
 }

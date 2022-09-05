@@ -3,22 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Exports\PostsExport;
 use App\Imports\PostsImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     public function index()
     {
-        if(request('search')){
-           return Post::where('title', 'like', '%'. request('search'). '%')
-                    ->orderBy('id', 'desc')->get();
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        if( $user->user_type == 0){
+            if(request('search')){
+                return Post::where('title', 'like', '%'. request('search'). '%')
+                         ->orderBy('id', 'desc')->get();
+             }
+             return Post::orderBy('id','desc')->get();
         }
-        return Post::orderBy('id','desc')->get();
+        if(request('search')){
+            return Post::where('title', 'like', '%'. request('search'). '%')
+                     ->orderBy('id', 'desc')->get();
+         }
+         return Post::where('created_user_id', $id)->orderBy('id','desc')->get();
+        
     }
     public function show(Post $post)
     {
@@ -32,6 +42,7 @@ class PostController extends Controller
             'image' => 'nullable'
         ]);
         $requestData =$request->all();
+        $requestData['created_user_id'] = Auth::user()->id;
         if($request->hasFile('image')){
             $fileName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $fileName);
@@ -49,6 +60,7 @@ class PostController extends Controller
         ]);
         
         $requestData =$request->all();
+        $requestData['created_user_id'] = Auth::user()->id;
         if($request->hasFile('image')) {
             $fileName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $fileName);
@@ -92,7 +104,8 @@ class PostController extends Controller
             Post::updateOrCreate([
                 'title' => $row['title'],
                 'description' => $row['description'],
-                'image' => $row['image']
+                'image' => $row['image'],
+                'created_user_id' => $row['userid'],
             ]);
         }
         return redirect('/api/posts');   

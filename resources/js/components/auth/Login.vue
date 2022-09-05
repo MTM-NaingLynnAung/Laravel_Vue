@@ -32,7 +32,6 @@ export default {
       },
       message: {},
       messageError: false
-      // loginStatus: true
     }
   },
   methods: {
@@ -40,7 +39,7 @@ export default {
       axios.post('/api/login', this.user)
       .then(response => {
         localStorage.setItem('token', response.data)
-        this.$router.push({name: 'UserIndex'})
+        this.$router.push({name: 'PostIndex'})
         window.location.reload();
         
       })
@@ -48,9 +47,6 @@ export default {
         this.message = error.response.data.message
         this.messageError = true
       });
-      // this.$emit('login-status', {
-      //   loginStatus: this.loginStatus
-      // })
     }
   }
 }

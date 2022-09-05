@@ -11,29 +11,37 @@
               <li class="nav-item">
                 <router-link :to="{ name: 'PostIndex' }" class="">Post List</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="user.user_type == '0'">
                 <router-link :to="{ name: 'UserIndex' }" class="">User List</router-link>
               </li>
              
             </ul>
           </div>
-         
+          
+          <router-link :to="'/users/edit/'+user.id" class="me-3 p-0 rounded-pill">
+          <img :src="user.image" alt="" width="45" height="45" class="rounded-circle">
+          {{ user.email }}</router-link>
           <button class="btn btn-danger" @click="logout">Logout</button>
         </div>
       </nav>
       <router-view />
 
-      <!-- <Login @login-status="showNav" /> -->
     </div>
 </template>
 
 <script>
-// import Login from './components/auth/Login.vue'
 
 export default {
   data(){
     return {
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('token'),
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        image: '',
+        user_type: ''
+      }
     }
   },
   methods: {
@@ -46,6 +54,12 @@ export default {
       })
       .catch(error => console.log(error))
     },
+  },
+  mounted(){
+    axios.get('/api/user')
+    .then(response => {
+      this.user = response.data
+      })
   }
   
 }

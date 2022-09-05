@@ -52,8 +52,14 @@ class UserController extends Controller
             'password' => 'required',
             'confirm_password' => 'required|same:password'
         ]);
-        $request->created_user_id = Auth::user()->id;
         $requestData = $request->all();
+        $requestData['created_user_id'] = Auth::user()->id;
+        if($requestData['user_type'] == 'Admin'){
+            $requestData['user_type'] = 0;
+        }else{
+            $requestData['user_type'] = 1;
+        }
+       
         if($request->hasFile('image')){
             $fileName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $fileName);
@@ -67,8 +73,10 @@ class UserController extends Controller
             'email' => $requestData['email'],
             'password' => bcrypt($requestData['password']),
             'image' => $requestData['image'],
-            'created_user_id' => $requestData['created_user_id']
+            'created_user_id' => $requestData['created_user_id'],
+            'user_type' => $requestData['user_type']
         ]);
+        
     }
     public function update(Request $request)
     {
@@ -78,6 +86,12 @@ class UserController extends Controller
         ]);
         $user = User::find($request->id);
         $requestData = $request->all();
+        $requestData['created_user_id'] = Auth::user()->id;
+        if($requestData['user_type'] == 'Admin'){
+            $requestData['user_type'] = 0;
+        }else{
+            $requestData['user_type'] = 1;
+        }
         if($request->hasFile('image')){
             $fileName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $fileName);

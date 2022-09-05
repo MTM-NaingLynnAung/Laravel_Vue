@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
+            'user_type' => 0,
             'password' => bcrypt('password'),
             'image' => '/images/profile.png',
             'created_user_id' => 1
-
         ]);
     }
 }
